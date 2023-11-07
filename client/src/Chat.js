@@ -20,11 +20,12 @@ function Chat({ socket, username, room }) {
 
 			await socket.emit('send_message', messageData);
 			setMessageList((list) => [...list, messageData]);
+			setCurrentMessage("");
 		}
 	};
 
 	useEffect(() => {
-		socket.on('recieve_message', (data) => {
+		return() => socket.on('recieve_message', (data) => {
 			setMessageList((list) => [...list, data]);
 		});
 	}, [socket]);
@@ -35,7 +36,7 @@ function Chat({ socket, username, room }) {
 				<p>Live Chat</p>
 			</div>
 			<div className="chat-body">
-				<ScrollToBottom>
+				<ScrollToBottom className="message-container">
 					{MessageList.map((messageContent) => {
 						return (
 							<div
@@ -47,7 +48,7 @@ function Chat({ socket, username, room }) {
 								</div>
 								<div className="message-meta">
 									<p id="time">{messageContent.time}</p>
-									<p id="author">{messageContent.author} </p>
+									<p id="author">{messageContent.author}</p>
 								</div>
 							</div>
 						);
@@ -58,6 +59,7 @@ function Chat({ socket, username, room }) {
 			<div className="chat-footer">
 				<input
 					type="text"
+					value={currentMessage}
 					placeholder="Hey..."
 					onChange={(event) => {
 						setCurrentMessage(event.target.value);

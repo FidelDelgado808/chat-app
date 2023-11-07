@@ -47,6 +47,9 @@ function App() {
 export default App;
 
 /* 
+Troubleshoot
+[X] Lige nu skrives dere 2-4 beskeder når der sendes én besked
+Features:
 [] End-2-End encryption
 [] Flere chats sendes ét sted hen til én supporter
 
