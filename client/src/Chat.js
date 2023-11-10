@@ -9,6 +9,7 @@ function Chat({ socket, username, room }) {
 	const sendMessage = async () => {
 		if (currentMessage !== '') {
 			const messageData = {
+				id: Math.random().toString(16).slice(2),
 				room: room,
 				author: username,
 				message: currentMessage,
@@ -20,14 +21,15 @@ function Chat({ socket, username, room }) {
 
 			await socket.emit('send_message', messageData);
 			setMessageList((list) => [...list, messageData]);
-			setCurrentMessage("");
+			setCurrentMessage('');
 		}
 	};
 
 	useEffect(() => {
-		return() => socket.on('recieve_message', (data) => {
-			setMessageList((list) => [...list, data]);
-		});
+		return () =>
+			socket.on('recieve_message', (data) => {
+				setMessageList((list) => [...list, data]);
+			});
 	}, [socket]);
 
 	return (
@@ -40,6 +42,7 @@ function Chat({ socket, username, room }) {
 					{MessageList.map((messageContent) => {
 						return (
 							<div
+								key={messageContent.id}
 								className="message"
 								id={username === messageContent.author ? 'you' : 'other'}
 							>
